@@ -5,9 +5,9 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { JwtStrategy } from './guards/strategy/jwt.strategy';
 import { databaseProviders } from '../database/database.providers';
-import { usuarioProvider } from 'src/users/providers/usuario.provider';
-import { UsuarioModule } from 'src/users/usuario.module';
-import { UsuarioService } from 'src/users/services/usuario.service';
+import { usuarioProvider } from 'src/usuarios/providers/usuario.provider';
+import { UsuarioModule } from 'src/usuarios/usuario.module';
+import { UsuarioService } from 'src/usuarios/services/usuario.service';
 
 @Module({
   imports: [
@@ -17,7 +17,6 @@ import { UsuarioService } from 'src/users/services/usuario.service';
         expiresIn: 60 * 6
       }
     }),
-    forwardRef(() => UsuarioModule)
   ],
   controllers: [AuthController],
   providers: [
@@ -28,6 +27,6 @@ import { UsuarioService } from 'src/users/services/usuario.service';
     JwtStrategy,
     UsuarioService,
   ],
-  exports: [AuthService],
+  exports: [AuthService, JwtService],
 })
 export class AuthModule { }
