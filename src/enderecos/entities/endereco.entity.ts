@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { UsuarioEntity } from "src/usuarios/entities/usuario.entity";
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "enderecos" })
 export class EnderecoEntity {
@@ -41,7 +42,11 @@ export class EnderecoEntity {
   @Column({
     type: "varchar",
     length: 255,
+    default: null,
   })
   complemento: string;
+
+  @OneToOne(() => UsuarioEntity, (usuarioEntity) => usuarioEntity.endereco)
+  usuario: UsuarioEntity
 
 }

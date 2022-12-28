@@ -1,4 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { EnderecoEntity } from "src/enderecos/entities/endereco.entity";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "usuarios" })
 export class UsuarioEntity {
@@ -45,5 +46,10 @@ export class UsuarioEntity {
 
   @Column({ type: "boolean", default: true })
   status: boolean;
+
+  @OneToOne(() => EnderecoEntity, { cascade: true })
+  @JoinColumn({ name: "endereco_id" })
+  endereco: EnderecoEntity;
+
 
 }
