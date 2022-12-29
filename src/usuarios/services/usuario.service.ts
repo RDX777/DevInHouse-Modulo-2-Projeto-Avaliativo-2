@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, ServiceUnavailableException, UnauthorizedException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from "src/core/auth/services/auth.service";
@@ -7,6 +7,7 @@ import { CriaUsuarioDto } from "../dtos/cria-usuario.dto";
 import { EnderecoService } from "src/enderecos/services/endereco.service";
 import { CredenciaisDTO } from "src/core/auth/dto/credenciais-usuario.dto";
 import { RetornoVerificacaoSenhaDto } from "../dtos/retorno-verificacao-senha.dto";
+import { TrocaSenhaDto } from "../dtos/troca-senha.dto";
 
 @Injectable()
 export class UsuarioService {
@@ -76,6 +77,17 @@ export class UsuarioService {
   private async checaSenha(senha: string, usuario: UsuarioEntity): Promise<boolean> {
     const hash = await bcrypt.hash(senha, usuario.salt)
     return hash === usuario.senha;
+  }
+
+  public async trocasenha(dadosUsuario: object, senhas: TrocaSenhaDto) {
+    const usuarioAtual = {
+      email: dadosUsuario["email"],
+      senha: senhas.senhaAtual
+    }
+    const usuario = await this.verificaCredenciais(usuarioAtual);
+    const saltoUsuario = await await bcrypt.genSalt(12);
+    const hashSenha = await bcrypt.hash(senhas.senhaNova, saltoUsuario);
+    this.usuarioRepository.update({ id: usuario.id }, { senha: hashSenha, salt: saltoUsuario });
   }
 
 }

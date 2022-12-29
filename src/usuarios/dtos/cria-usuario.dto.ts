@@ -21,7 +21,7 @@ export class CriaUsuarioDto {
   @MaxLength(64)
   readonly senha: string;
 
-  @Match("senha")
+  @Match(["senha", "equals"])
   readonly confirmaSenha: string;
 
   readonly telefone: string;

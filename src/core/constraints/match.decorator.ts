@@ -1,28 +1,36 @@
 import { registerDecorator, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 
-export function Match(property: string, validationOptions?: ValidationOptions) {
+export function Match(property: Array<string>, validationOptions?: ValidationOptions) {
     return (object: any, propertyName: string) => {
         registerDecorator({
             target: object.constructor,
             propertyName,
             options: validationOptions,
-            constraints: [property],
+            constraints: property,
             validator: MatchConstraint,
         });
     };
 }
 
-// Registro um novo validador. Utilização como decorator @Match('referencia')
 @ValidatorConstraint({ name: 'Match' })
 export class MatchConstraint implements ValidatorConstraintInterface {
-    // comparo os dois valores, o recebido com o referência.    
-    validate(value: any, args: ValidationArguments) {
-        const [relatedPropertyName] = args.constraints;
+    validate(value: Array<string>, args: ValidationArguments) {
+        const [relatedPropertyName, action] = args.constraints;
         const relatedValue = (args.object as any)[relatedPropertyName];
-        return value === relatedValue;
+        if (action === "equals") {
+            return value === relatedValue;
+        } else if (action === "different") {
+            return value !== relatedValue;
+        }
     }
     defaultMessage?(validationArguments?: ValidationArguments): string {
-        return "As Senhas não conferem: ";
+        const [field, action] = validationArguments.constraints
+        if (action === "equals") {
+            return "As Senhas não conferem: " + field;
+        } else if (action === "different") {
+            return "As Senhas devem ser diferentes: " + field;
+        }
+
     }
 
 }
