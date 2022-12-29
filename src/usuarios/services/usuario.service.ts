@@ -5,6 +5,8 @@ import { AuthService } from "src/core/auth/services/auth.service";
 import { UsuarioEntity } from "../entities/usuario.entity";
 import { CriaUsuarioDto } from "../dtos/cria-usuario.dto";
 import { EnderecoService } from "src/enderecos/services/endereco.service";
+import { CredenciaisDTO } from "src/core/auth/dto/credenciais-usuario.dto";
+import { RetornoVerificacaoSenhaDto } from "../dtos/retorno-verificacao-senha.dto";
 
 @Injectable()
 export class UsuarioService {
@@ -42,8 +44,38 @@ export class UsuarioService {
     })
   }
 
-  private async criaSalt(saltos: number): Promise<string> {
-    return await bcrypt.genSalt(saltos)
+  public async verificaCredenciais(credenciais: CredenciaisDTO): Promise<RetornoVerificacaoSenhaDto> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { email, senha } = credenciais;
+
+        const usuario = await this.usuarioRepository.findOne({
+          where: {
+            email: email,
+            status: true,
+          }
+        }
+        )
+
+        if (usuario && await this.checaSenha(senha, usuario)) {
+          const dadosUsuario = {
+            id: usuario.id,
+            nome: usuario.nomeCompleto,
+            urlFoto: usuario.urlFoto,
+            email: usuario.email,
+          }
+          resolve(dadosUsuario)
+        }
+        throw new UnauthorizedException('E-mail e/ou senha incorretos')
+      } catch (erro) {
+        reject(erro)
+      }
+    })
+  }
+
+  private async checaSenha(senha: string, usuario: UsuarioEntity): Promise<boolean> {
+    const hash = await bcrypt.hash(senha, usuario.salt)
+    return hash === usuario.senha;
   }
 
 }
