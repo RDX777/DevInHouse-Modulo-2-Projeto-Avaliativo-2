@@ -1,5 +1,6 @@
+import { DispositivoEntity } from "src/dispositivos/entities/dispositivo.entity";
 import { EnderecoEntity } from "src/enderecos/entities/endereco.entity";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "usuarios" })
 export class UsuarioEntity {
@@ -41,6 +42,7 @@ export class UsuarioEntity {
   @Column({
     type: "varchar",
     length: 255,
+    default: null,
   })
   telefone: string;
 
@@ -51,5 +53,8 @@ export class UsuarioEntity {
   @JoinColumn({ name: "endereco_id" })
   endereco: EnderecoEntity;
 
+  @ManyToMany(type => DispositivoEntity)
+  @JoinTable({ name: 'usuario_dispositivos' })
+  usuarios: DispositivoEntity[];
 
 }

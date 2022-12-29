@@ -1,5 +1,5 @@
 import { UsuarioEntity } from "src/usuarios/entities/usuario.entity";
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "enderecos" })
 export class EnderecoEntity {
@@ -7,8 +7,7 @@ export class EnderecoEntity {
   id: number;
 
   @Column({
-    type: "varchar",
-    length: 8,
+    type: "integer",
   })
   cep: number;
 
