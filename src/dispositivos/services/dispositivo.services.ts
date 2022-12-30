@@ -1,4 +1,4 @@
-import { Injectable, Inject, ForbiddenException } from "@nestjs/common";
+import { Injectable, Inject, ForbiddenException, NotFoundException } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import { UsuarioEntity } from "src/usuarios/entities/usuario.entity";
 import { DispositivoEntity } from "../entities/dispositivo.entity";
@@ -77,6 +77,50 @@ export class DispositivoService {
       }
     })
 
+  }
+
+  public async detalheDispositivo(usuario: object, parametro: number): Promise<RetornoDispositivoFiltradoDto> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const detalhe = await this.dispositivoRepository.findOne({
+          where: {
+            id: parametro,
+            local: {
+              usuario: usuario["id"]
+            }
+          },
+          relations: {
+            local: true
+          }
+        });
+        if (detalhe) {
+          const detalhes = this.coletaLocal(detalhe)
+          resolve(detalhes)
+        }
+        throw new NotFoundException("Dispositivo não encontrado")
+      } catch (erro) {
+        console.log
+        reject(erro)
+      }
+    });
+
+  }
+
+  private coletaLocal(dispositivo: DispositivoEntity): RetornoDispositivoFiltradoDto {
+    try {
+      return {
+        nomeDispositivo: dispositivo.nome,
+        tipo: dispositivo.tipo,
+        fabricante: dispositivo.fabricante,
+        local: dispositivo.local[0] ? dispositivo.local[0]["local"] : "Dispositivo não vinculado a este usuario",
+        estado: dispositivo.local[0] ? dispositivo.local[0]["estado"] : "Dispositivo não vinculado a este usuario",
+        informacoes: dispositivo.informacoes,
+        enderecoIP: dispositivo.local[0] ? dispositivo.local[0]["enderecoIP"] : "Dispositivo não vinculado a este usuario",
+        enderecoMAC: dispositivo.enderecoMAC
+      }
+    } catch (erro) {
+      console.log(erro)
+    }
   }
 
 }

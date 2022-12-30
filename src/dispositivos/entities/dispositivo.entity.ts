@@ -37,6 +37,6 @@ export class DispositivoEntity {
   enderecoMAC: string;
 
   @OneToMany(() => LocalEntity, (local) => local.dispositivo, { cascade: true })
-  dispositivo: LocalEntity[]
+  local: LocalEntity[]
 
 }

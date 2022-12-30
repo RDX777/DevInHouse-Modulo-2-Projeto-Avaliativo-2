@@ -1,6 +1,5 @@
-import { Controller, Get, UseGuards, Request, Query, Post, Body, HttpStatus } from "@nestjs/common";
+import { Controller, Get, UseGuards, Request, Query, Post, Body, HttpStatus, Param } from "@nestjs/common";
 import { JwtAuthGuard } from "src/core/auth/guards/jwt-auth.guard";
-import { NestResponseBuilder } from "src/core/http/nest-response-builder";
 import { RespostaHttpService } from "src/core/http/services/resposta-http.service";
 import { VinculoDispositivoInDto } from "../dtos/vinculo-dispositivo-in.dto";
 import { DispositivoService } from "../services/dispositivo.services";
@@ -31,5 +30,17 @@ export class DispositivoController {
     }).catch((erro) => {
       return this.respostaHttp.responde(HttpStatus.BAD_REQUEST, "dispositivo/vincular", { message: erro })
     });
+  }
+
+  @Get("detalhe/:idDispositivo")
+  public async detalhe(@Request() request: any, @Param() parametro: object) {
+    if (parametro) {
+      return await this.dispositivoService.detalheDispositivo(request.user, parametro["idDispositivo"]).then((resposta) => {
+        return this.respostaHttp.responde(HttpStatus.OK, "dispositivo/detalhe/" + parametro["idDispositivo"], resposta)
+      }).catch((erro) => {
+        return this.respostaHttp.responde(HttpStatus.BAD_REQUEST, "dispositivo/detalhe/" + parametro, { message: erro })
+      });
+    }
+    return this.respostaHttp.responde(HttpStatus.BAD_REQUEST, "dispositivo/detalhe/" + parametro, { message: "Favor informar um dispositivo" })
   }
 }
