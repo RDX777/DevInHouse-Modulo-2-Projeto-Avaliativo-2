@@ -1,7 +1,8 @@
 export enum LocalDispositivo {
-  SOTAO = "Sótão",
-  SACADA = "Sacada / Varanda",
-  PORAO = "Porão",
+  SOTAO = "Sotao",
+  SACADA = "Sacada",
+  VARANDA = "Varanda",
+  PORAO = "Porao",
   BANHEIRO = "Banheiro",
   QUARTO = "Quarto",
   SALAJANTAR = "Sala de jantar",
