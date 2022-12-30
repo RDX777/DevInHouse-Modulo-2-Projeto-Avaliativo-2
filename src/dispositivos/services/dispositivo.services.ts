@@ -1,12 +1,13 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { Injectable, Inject, ForbiddenException } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import { UsuarioEntity } from "src/usuarios/entities/usuario.entity";
 import { DispositivoEntity } from "../entities/dispositivo.entity";
-import { DispositivoDto } from "../dtos/dispositivos.dto";
 import { RetornoDispositivoDto } from "../dtos/retorno-dispositivos.dto";
-import { LocalEntity } from "src/locais/entities/local.entity";
 import { LocalDto } from "src/locais/dtos/local.dto";
 import { RetornoDispositivoFiltradoDto } from "../dtos/retorno-dispositivo-filtrado.dto";
+import { VinculoDispositivoInDto } from "../dtos/vinculo-dispositivo-in.dto";
+import { LocalService } from "src/locais/services/local.service";
+import { VinculoDispositivoOutDto } from "../dtos/vinculo-dispositivo-out.dto";
 
 @Injectable()
 export class DispositivoService {
@@ -16,23 +17,12 @@ export class DispositivoService {
     private dispositivoRepository: Repository<DispositivoEntity>,
     @Inject('USUARIO_REPOSITORY')
     private usuarioRepository: Repository<UsuarioEntity>,
-    @Inject('LOCAL_REPOSITORY')
-    private localRepository: Repository<LocalEntity>) { }
+    private localService: LocalService) { }
 
   public async listar(usuario: object, local: string): Promise<RetornoDispositivoDto> {
     return new Promise(async (resolve, reject) => {
       try {
-        const dadosDispositivo = await this.localRepository.find({
-          relations: {
-            usuario: false,
-            dispositivo: true
-          },
-          where: {
-            usuario: {
-              id: usuario["id"]
-            },
-          },
-        })
+        const dadosDispositivo = await this.localService.localizaLocal(usuario);
 
         const listaDispositivos = this.coletaDispositivos(dadosDispositivo, local)
 
@@ -71,6 +61,22 @@ export class DispositivoService {
 
       }
     })
+  }
+
+  public async vincular(usuario: object, body: VinculoDispositivoInDto): Promise<VinculoDispositivoOutDto> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const jaVimnculado = await this.localService.jaAtribuido(usuario, +body.id);
+        if (!jaVimnculado) {
+          const dispositivoSalvo = await this.localService.insereLocal(usuario, body);
+          resolve(dispositivoSalvo);
+        }
+        throw new ForbiddenException("Dispositivo ja vinculado")
+      } catch (erro) {
+        reject(erro)
+      }
+    })
+
   }
 
 }

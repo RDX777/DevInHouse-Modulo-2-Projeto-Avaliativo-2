@@ -5,6 +5,8 @@ import { DispositivoController } from './controllers/dispositivo.controller';
 import { dispositivoProvider } from './providers/dispositivo.provider';
 import { DispositivoService } from './services/dispositivo.services';
 import { localProvider } from "src/locais/providers/local.provider"
+import { RespostaHttpService } from 'src/core/http/services/resposta-http.service';
+import { LocalService } from 'src/locais/services/local.service';
 
 @Module({
   imports: [],
@@ -16,6 +18,8 @@ import { localProvider } from "src/locais/providers/local.provider"
     ...dispositivoProvider,
     ...localProvider,
     DispositivoService,
+    RespostaHttpService,
+    LocalService,
   ],
 })
 export class DispositivoModule { }

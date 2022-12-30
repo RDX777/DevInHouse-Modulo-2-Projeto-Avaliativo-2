@@ -27,6 +27,7 @@ export class LocalEntity {
   @Column({
     type: "varchar",
     length: 255,
+    default: null,
   })
   enderecoIP: string;
 

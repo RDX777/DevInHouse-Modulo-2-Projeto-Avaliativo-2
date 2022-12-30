@@ -29,7 +29,7 @@ export class UsuarioService {
         }
         const novoUsuario = new UsuarioEntity();
         novoUsuario.nomeCompleto = usuario.nomeCompleto;
-        novoUsuario.urlFoto = usuario.urlFoto ? usuario.urlFoto : "http://localhost:3000/foto/fotopadrao.jpg"
+        novoUsuario.urlFoto = usuario.urlFoto ? usuario.urlFoto : "http://localhost:3000/foto/fotopadrao.jpg";
         novoUsuario.email = usuario.email;
         novoUsuario.salt = await bcrypt.genSalt(12)
         novoUsuario.senha = await bcrypt.hash(usuario.senha, novoUsuario.salt);
