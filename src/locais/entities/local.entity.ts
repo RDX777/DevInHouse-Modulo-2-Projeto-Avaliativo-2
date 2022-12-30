@@ -16,7 +16,11 @@ export class LocalEntity {
   @JoinColumn({ name: 'dispositivo_id' })
   dispositivo: DispositivoEntity;
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: LocalDispositivo,
+    default: null
+  })
   local: LocalDispositivo;
 
   @Column({
