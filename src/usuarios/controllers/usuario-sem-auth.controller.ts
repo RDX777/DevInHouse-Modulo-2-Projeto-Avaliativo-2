@@ -8,15 +8,6 @@ export class UsuarioSemAuthController {
 
   constructor(private usuarioService: UsuarioService) { }
 
-  @Get("semauth")
-  public comaut() {
-    return new NestResponseBuilder()
-      .withStatus(HttpStatus.OK)
-      .withHeaders({ Location: `auth/token/cria` })
-      .withBody({ message: "Sem auth" })
-      .build();
-  }
-
   @Post("cadastra")
   public async store(@Body() usuario: CriaUsuarioDto) {
     try {

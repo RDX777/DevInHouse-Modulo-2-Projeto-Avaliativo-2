@@ -5,6 +5,7 @@ import { TransformResponseInterceptor } from './core/http/transform-response-int
 
 import { AuthModule } from './core/auth/auth.module';
 import { UsuarioModule } from './usuarios/usuario.module';
+import { DispositivoModule } from './dispositivos/dispositivo.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { UsuarioModule } from './usuarios/usuario.module';
       isGlobal: true
     }),
     UsuarioModule,
-    AuthModule
+    DispositivoModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [

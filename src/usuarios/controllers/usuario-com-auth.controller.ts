@@ -10,11 +10,6 @@ export class UsuarioComAuthController {
 
   constructor(private usuarioService: UsuarioService) { }
 
-  @Get("comauth")
-  public comaut() {
-    console.log("Com autenticação")
-  }
-
   @Post("trocasenha")
   public async trocasenha(@Request() request: any, @Body() senhas: TrocaSenhaDto) {
     return await this.usuarioService.trocasenha(request.user, senhas).then(() => {

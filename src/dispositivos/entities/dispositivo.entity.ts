@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { LocalDispositivo } from "../utils/local.enum";
+import { LocalEntity } from "src/locais/entities/local.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "dispositivos" })
 export class DispositivoEntity {
@@ -22,18 +22,7 @@ export class DispositivoEntity {
     type: "varchar",
     length: 255,
   })
-  local: LocalDispositivo;
-
-  @Column({
-    type: "varchar",
-    length: 255,
-  })
   fabricante: string;
-
-  @Column({
-    type: "boolean",
-  })
-  estado: boolean;
 
   @Column({
     type: "varchar",
@@ -45,12 +34,9 @@ export class DispositivoEntity {
     type: "varchar",
     length: 255,
   })
-  enderecoIP: string;
-
-  @Column({
-    type: "varchar",
-    length: 255,
-  })
   enderecoMAC: string;
+
+  @OneToMany(() => LocalEntity, (local) => local.dispositivo, { cascade: true })
+  dispositivo: LocalEntity[]
 
 }
