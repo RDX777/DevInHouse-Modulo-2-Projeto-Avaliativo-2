@@ -1,73 +1,276 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# DevInHouse Modulo 2 - Projeto Avaliativo 2 - Connect Lab backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<h4 align="center">
+ 🚀 ... Concluido ... 🚀
+</h4>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Link Trello
 
-## Description
+[Projeto Avaliativo](https://trello.com/b/FBYhfowc/avaliativo)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Descrição
 
-## Installation
+Sistema backend do sistema Connect Lab
+
+## Funções
+
+- [x] Login usando JWT
+- [x] Autenticação basica
+- [x] Cadastro de novos usuarios
+- [x] Troca de senha de usuario cadastrado
+- [x] Vincular dispositivo com usuario
+- [x] Detalhes do dispositivo por meio de ID
+- [x] Listar dispositivos do usuario com filtro
+
+## Instalação
 
 ```bash
-$ npm install
+git clone https://github.com/RDX777/DevInHouse-Modulo-2-Projeto-Avaliativo-2.git
 ```
 
-## Running the app
+```bash
+cd DevInHouse-Modulo-2-Projeto-Avaliativo-2
+```
 
 ```bash
-# development
+npm install
+```
+
+## Executando aplicação
+
+```bash
+# Iniciar
 $ npm run start
 
-# watch mode
+# Modo Desenvolvedor
 $ npm run start:dev
 
-# production mode
+# Modo Produção
 $ npm run start:prod
 ```
 
-## Test
+## Endpoints
 
-```bash
-# unit tests
-$ npm run test
+### Usuarios
 
-# e2e tests
-$ npm run test:e2e
+#### Criar novo usuario [usuario/cadastra]
 
-# test coverage
-$ npm run test:cov
+- Metodo
+  - POST
+- Headers
+  - Content-Type application/json
+- Body
+
+```
+{
+    "nomeCompleto" : "Nome Completo Usuario",
+    "email": "email@exemplo.com",
+    "telefone": "1999999999"
+    "senha": "senha",
+    "confirmaSenha": "senha",
+    "endereco": {
+        "cep": 11111111,
+        "logradouro": "Nome do logradouro",
+        "numero": 111,
+        "bairro": "Bairro",
+        "cidade": "Cidade",
+        "estado": "Estado",
+        "complemento": ""
+    }
+}
 ```
 
-## Support
+- Response 200
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+{
+    "message": "Usuario criado com sucesso"
+}
+```
 
-## Stay in touch
+#### Troca de senha [usuario/trocasenha]
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Metodo
+  - POST
+- Headers
+  - Content-Type application/json
+  - Authorization: Bearer [TOKEN]
+- Body
 
-## License
+```
+{
+    "email": "email@exemplo.com",
+    "senhaAtual": "senha",
+    "senhaNova": "senhanova",
+    "confirmacaoSenhaNova": "senhanova"
+}
+```
+
+- Response 200
+
+```
+{
+    "message": "Realizado troca de senha com sucesso"
+}
+```
+
+#### Perfil de usuario [usuario/perfil]
+
+- Metodo
+  - GET
+- Headers
+  - Content-Type application/json
+  - Authorization: Bearer [TOKEN]
+- Response 200
+
+```
+{
+    "nomeCompleto": "Nome Completo Usuario",
+    "urlFoto": "http://localhost:3000/foto/fotopadrao.jpg",
+    "email": "email@exemplo.com",
+    "telefone": "1999999999",
+    "endereco": {
+        "id": 1,
+        "cep": 11111111,
+        "logradouro": "Nome do logradouro",
+        "numero": 111,
+        "bairro": "Bairro",
+        "cidade": "Cidade",
+        "estado": "Estado",
+        "complemento": ""
+    }
+}
+```
+
+### Dispositivos
+
+#### Vincular dispositivo para um usuario [dispositivo/vincular]
+
+- Metodo
+  - POST
+- Headers
+  - Content-Type application/json
+  - Authorization: Bearer [TOKEN]
+- Body
+
+```
+{
+    "id" : 1,
+    "local": "Sala de jantar",
+    "enderecoIP": "192.168.0.12" 
+}
+```
+
+- Response 200
+
+```
+{
+    "local": "Sala de jantar",
+    "dispositivo": 1,
+    "usuario": 1,
+    "enderecoIP": "192.168.0.12",
+    "estado": false,
+    "id": 5
+}
+```
+
+#### Listar dispositivos [dispositivo/listar?local=]
+
+- Metodo
+  - GET
+- Parametro
+  - local
+- Headers
+  - Content-Type application/json
+  - Authorization: Bearer [TOKEN]
+- Response 200
+
+```
+{
+    "nomeUsuario": "Nome Completo Usuario",
+    "listaDispositivos": [
+        {
+        "nomeDispositivo": "Lâmpada 20W",
+        "tipo": "Lâmpada",
+        "fabricante": "Intelbras",
+        "local": "Sala de jantar",
+        "estado": false,
+        "informacoes": "Lâmpada: 20 W",
+        "enderecoIP": "192.168.0.12",
+        "enderecoMAC": "00:1B:44:11:3A:C0"
+        },
+        {
+        "nomeDispositivo": "Lâmpada 10W",
+        "tipo": "Lâmpada",
+        "fabricante": "Intelbras",
+        "local": "Sala de jantar",
+        "estado": false,
+        "informacoes": "Lâmpada: 10 W",
+        "enderecoIP": "192.168.0.12",
+        "enderecoMAC": "00:1B:44:11:3A:B8"
+        }
+    ]
+}
+```
+
+#### Listar dispositivos [dispositivo/detalhe/{ID DISPOSITIVO}]
+
+- Metodo
+  - GET
+- Headers
+  - Content-Type application/json
+  - Authorization: Bearer [TOKEN]
+- Response 200
+
+```
+{
+    "nomeDispositivo": "Lâmpada 15W",
+    "tipo": "Lâmpada",
+    "fabricante": "Intelbras",
+    "local": "Dispositivo não vinculado a este usuario",
+    "estado": "Dispositivo não vinculado a este usuario",
+    "informacoes": "Lâmpada: 15 W",
+    "enderecoIP": "Dispositivo não vinculado a este usuario",
+    "enderecoMAC": "00:1B:44:11:3A:B9"
+}
+```
+
+### Token
+
+#### Criação de um token [auth/token/cria]
+
+- Metodo
+  - POST
+- Headers
+  - Content-Type application/json
+- Body
+
+```
+{
+    "email": "email@exemplo.com",
+    "senha": "senha"
+}
+```
+
+- Response 200
+
+```
+{
+     "token": "{TOKEN}"
+}
+```
+
+## Testes
+
+Não foram implementados testes
+
+### Tecnologias
+
+- [Node.js](https://nodejs.org/)
+- [Javascript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
+- [NestJS](https://nestjs.com)
+- [TypeORM](https://typeorm.io)
+- [TypeScript](https://www.typescriptlang.org)
+- [Postgres](https://www.postgresql.org)
 
 Nest is [MIT licensed](LICENSE).
