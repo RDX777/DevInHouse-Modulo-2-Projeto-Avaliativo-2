@@ -10,6 +10,7 @@ import { usuarioProvider } from './providers/usuario.provider';
 import { enderecoProvider } from "src/enderecos/providers/endereco.provider"
 import { UsuarioService } from './services/usuario.service';
 import { EnderecoService } from 'src/enderecos/services/endereco.service';
+import { RespostaHttpService } from 'src/core/http/services/resposta-http.service';
 
 @Module({
   imports: [],
@@ -22,6 +23,7 @@ import { EnderecoService } from 'src/enderecos/services/endereco.service';
     UsuarioService,
     EnderecoService,
     AuthService,
+    RespostaHttpService,
     JwtService,
     JwtStrategy,
   ],

@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from "src/core/auth/services/auth.service";
@@ -8,6 +8,8 @@ import { EnderecoService } from "src/enderecos/services/endereco.service";
 import { CredenciaisDTO } from "src/core/auth/dto/credenciais-usuario.dto";
 import { RetornoVerificacaoSenhaDto } from "../dtos/retorno-verificacao-senha.dto";
 import { TrocaSenhaDto } from "../dtos/troca-senha.dto";
+import { RetornoCriaUsuarioDto } from "../dtos/retorno-cria-usuario.dto";
+import { PerfilUsuarioDto } from "../dtos/perfil-usuario.dto";
 
 @Injectable()
 export class UsuarioService {
@@ -20,7 +22,7 @@ export class UsuarioService {
     private enderecoService: EnderecoService
   ) { }
 
-  public async store(usuario: CriaUsuarioDto): Promise<object> {
+  public async store(usuario: CriaUsuarioDto): Promise<RetornoCriaUsuarioDto> {
     return new Promise(async (resolve, reject) => {
       let enderecoId = null;
       try {
@@ -88,6 +90,42 @@ export class UsuarioService {
     const saltoUsuario = await await bcrypt.genSalt(12);
     const hashSenha = await bcrypt.hash(senhas.senhaNova, saltoUsuario);
     this.usuarioRepository.update({ id: usuario.id }, { senha: hashSenha, salt: saltoUsuario });
+  }
+
+  public async perfil(usuario: object): Promise<PerfilUsuarioDto> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const perfilUsuario = await this.usuarioRepository.findOne({
+          where: {
+            id: usuario["id"]
+          },
+          relations: {
+            endereco: true
+          }
+        })
+        if (perfilUsuario) {
+          const retorno = this.coletaPerfil(perfilUsuario)
+          resolve(retorno);
+        }
+        throw new NotFoundException("Usuario não encontrado")
+      } catch (erro) {
+        reject(erro);
+      }
+    })
+  }
+
+  private coletaPerfil(perfilUsuario: UsuarioEntity) {
+    const retorno = {
+      nomeCompleto: perfilUsuario.nomeCompleto,
+      urlFoto: perfilUsuario.urlFoto,
+      email: perfilUsuario.email,
+      telefone: perfilUsuario.telefone,
+      endereco: perfilUsuario.endereco
+    }
+    if (perfilUsuario.telefone == null) {
+      delete retorno.telefone;
+    }
+    return retorno;
   }
 
 }

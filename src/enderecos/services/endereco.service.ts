@@ -34,7 +34,6 @@ export class EnderecoService {
 
         resolve(enderecoId);
       } catch (erro) {
-
         reject(erro)
       }
     })

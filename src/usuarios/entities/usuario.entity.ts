@@ -1,7 +1,6 @@
-import { DispositivoEntity } from "src/dispositivos/entities/dispositivo.entity";
 import { EnderecoEntity } from "src/enderecos/entities/endereco.entity";
 import { LocalEntity } from "src/locais/entities/local.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "usuarios" })
 export class UsuarioEntity {
@@ -50,15 +49,15 @@ export class UsuarioEntity {
   @Column({ type: "boolean", default: true })
   status: boolean;
 
-  @OneToOne(() => EnderecoEntity, { cascade: true })
-  @JoinColumn({ name: "endereco_id" })
+  // @OneToOne(() => EnderecoEntity, { cascade: true })
+  // @JoinColumn({ name: "endereco_id" })
+  // endereco: EnderecoEntity;
+
+  @ManyToOne(() => EnderecoEntity, (endereco) => endereco.id, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'endereco_id' })
   endereco: EnderecoEntity;
 
   @OneToMany(() => LocalEntity, (local) => local.usuario, { cascade: true })
   locais: LocalEntity[]
-
-  // @ManyToMany(type => DispositivoEntity)
-  // @JoinTable({ name: 'usuario_dispositivos' })
-  // dispositivos: DispositivoEntity[];
 
 }

@@ -82,7 +82,7 @@ export class DispositivoService {
   public async detalheDispositivo(usuario: object, parametro: number): Promise<RetornoDispositivoFiltradoDto> {
     return new Promise(async (resolve, reject) => {
       try {
-        const detalhe = await this.dispositivoRepository.findOne({
+        const detalhe = await this.dispositivoRepository.findOneOrFail({
           where: {
             id: parametro,
             local: {
@@ -97,9 +97,7 @@ export class DispositivoService {
           const detalhes = this.coletaLocal(detalhe)
           resolve(detalhes)
         }
-        throw new NotFoundException("Dispositivo não encontrado")
       } catch (erro) {
-        console.log
         reject(erro)
       }
     });

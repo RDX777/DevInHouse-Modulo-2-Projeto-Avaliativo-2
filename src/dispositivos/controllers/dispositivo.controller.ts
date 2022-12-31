@@ -38,7 +38,7 @@ export class DispositivoController {
       return await this.dispositivoService.detalheDispositivo(request.user, parametro["idDispositivo"]).then((resposta) => {
         return this.respostaHttp.responde(HttpStatus.OK, "dispositivo/detalhe/" + parametro["idDispositivo"], resposta)
       }).catch((erro) => {
-        return this.respostaHttp.responde(HttpStatus.BAD_REQUEST, "dispositivo/detalhe/" + parametro, { message: erro })
+        return this.respostaHttp.responde(HttpStatus.BAD_REQUEST, "dispositivo/detalhe/" + parametro, erro)
       });
     }
     return this.respostaHttp.responde(HttpStatus.BAD_REQUEST, "dispositivo/detalhe/" + parametro, { message: "Favor informar um dispositivo" })

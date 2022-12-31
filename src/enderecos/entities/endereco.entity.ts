@@ -1,5 +1,5 @@
 import { UsuarioEntity } from "src/usuarios/entities/usuario.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "enderecos" })
 export class EnderecoEntity {
@@ -45,7 +45,13 @@ export class EnderecoEntity {
   })
   complemento: string;
 
-  @OneToOne(() => UsuarioEntity, (usuarioEntity) => usuarioEntity.endereco)
+  // @OneToOne(() => UsuarioEntity, (usuarioEntity) => usuarioEntity.endereco)
+  // usuario: UsuarioEntity
+
+  @OneToMany(() => UsuarioEntity, (usuarioEntity) => usuarioEntity.endereco, { cascade: true })
   usuario: UsuarioEntity
+
+
+
 
 }
